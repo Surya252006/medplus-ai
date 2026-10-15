@@ -2,7 +2,7 @@
 
 const API_BASE = (window.location.protocol.startsWith('http') && window.location.port === '8000')
   ? '' 
-  : 'http://localhost:8000';
+  : (localStorage.getItem('MEDPULSE_API_URL') || 'http://localhost:8000');
 
 const api = {
   async getHealth() {
@@ -65,29 +65,57 @@ const api = {
   },
 
   async getFacilities(params = {}) {
-    const query = new URLSearchParams();
-    if (params.query) query.append('query', params.query);
-    if (params.category && params.category !== 'ALL') query.append('category', params.category);
-    if (params.emergency_only) query.append('emergency_only', 'true');
-    if (params.lat !== undefined && params.lon !== undefined) {
-      query.append('lat', params.lat);
-      query.append('lon', params.lon);
+    try {
+      const query = new URLSearchParams();
+      if (params.query) query.append('query', params.query);
+      if (params.category && params.category !== 'ALL') query.append('category', params.category);
+      if (params.emergency_only) query.append('emergency_only', 'true');
+      if (params.lat !== undefined && params.lon !== undefined) {
+        query.append('lat', params.lat);
+        query.append('lon', params.lon);
+      }
+      const res = await fetch(`${API_BASE}/api/facilities?${query.toString()}`);
+      if (res.ok) return await res.json();
+      throw new Error(`Facilities API error: ${res.status}`);
+    } catch (err) {
+      console.warn("Falling back to static facilities dataset:", err);
+      // Fallback for static hosting
+      const res = await fetch('/data/sample_facilities.json');
+      let facilities = await res.json();
+      if (params.category && params.category !== 'ALL') {
+        facilities = facilities.filter(f => f.category === params.category);
+      }
+      if (params.emergency_only) {
+        facilities = facilities.filter(f => f.emergency_services);
+      }
+      if (params.query) {
+        const q = params.query.toLowerCase();
+        facilities = facilities.filter(f => f.name.toLowerCase().includes(q) || f.address.toLowerCase().includes(q));
+      }
+      return facilities;
     }
-    const res = await fetch(`${API_BASE}/api/facilities?${query.toString()}`);
-    if (!res.ok) throw new Error(`Facilities search error (${res.status})`);
-    return await res.json();
   },
 
   async getFacilityDetail(facilityId) {
-    const res = await fetch(`${API_BASE}/api/facilities/${facilityId}`);
-    if (!res.ok) throw new Error(`Facility fetch error (${res.status})`);
-    return await res.json();
+    try {
+      const res = await fetch(`${API_BASE}/api/facilities/${facilityId}`);
+      if (res.ok) return await res.json();
+      throw new Error(`Facility fetch error`);
+    } catch (err) {
+      const facilities = await this.getFacilities();
+      return facilities.find(f => f.id === facilityId) || null;
+    }
   },
 
   async getAssessments() {
-    const res = await fetch(`${API_BASE}/api/assessments`);
-    if (!res.ok) throw new Error(`History fetch error (${res.status})`);
-    return await res.json();
+    try {
+      const res = await fetch(`${API_BASE}/api/assessments`);
+      if (res.ok) return await res.json();
+      throw new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      console.warn("Assessments API offline, reading local cache");
+      return JSON.parse(localStorage.getItem('medpulse_assessments_cache') || '[]');
+    }
   },
 
   async deleteAssessment(id) {
