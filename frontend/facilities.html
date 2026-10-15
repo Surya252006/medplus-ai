@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nearby Healthcare Finder — MedPulse AI</title>
+  <meta name="description" content="Find nearby rural and semi-urban Primary Health Centres, CHCs, and Hospitals on an interactive OpenStreetMap.">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Emergency Alert Bar -->
+  <aside class="emergency-top-banner">
+    <span>🚨 <span data-i18n="emergency_call_text">Emergency? Call 108 / 112 immediately</span></span>
+    <span class="dial-badge">
+      <a href="tel:108">Ambulance: 108</a> • <a href="tel:112">National: 112</a> • <a href="tel:104">Health Advice: 104</a>
+    </span>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        MedPulse <span class="highlight">AI</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+        <li><a href="assessment.html" data-i18n="nav_symptoms">Check Symptoms</a></li>
+        <li><a href="facilities.html" class="active" data-i18n="nav_facilities">Find Healthcare</a></li>
+        <li><a href="dashboard.html" data-i18n="nav_dashboard">My Dashboard</a></li>
+        <li><a href="clinician.html" data-i18n="nav_clinician">Clinician Portal</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <select id="global-lang-select" class="lang-selector-select" aria-label="Choose Language">
+          <option value="en">🇬🇧 English</option>
+          <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content" style="padding-bottom: 1rem;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;" data-i18n="fac_page_title">
+          Nearby Healthcare Resource Navigator
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;" data-i18n="fac_page_desc">
+          Verified directory of Primary Health Centres (PHC), Community Health Centres (CHC), and Government Hospitals.
+        </p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="background: #E0F2FE; color: #0369A1; font-weight: 700; font-size: 0.775rem; padding: 4px 10px; border-radius: var(--radius-full);">
+          Verified Demonstration Directory
+        </span>
+        <span id="facility-count" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+          Loading facilities...
+        </span>
+      </div>
+    </div>
+
+    <!-- Facilities Layout: Map + List Split -->
+    <div class="facilities-layout">
+      
+      <!-- Left Column: Search & Facility List -->
+      <section class="facility-list-pane">
+        
+        <!-- Search & Filter Controls Card -->
+        <div class="facility-search-card">
+          <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+            <input type="text" id="facility-search-input" class="form-control" data-i18n-placeholder="fac_search_placeholder" placeholder="Search village, town, district, or pin code (e.g. Melur, Madurai, 625106)">
+            <button type="button" id="btn-get-location" class="btn btn-secondary btn-sm" style="white-space: nowrap; flex-shrink: 0;" title="Request browser location access to measure distance" data-i18n="btn_use_location">
+              📍 Use My Location
+            </button>
+          </div>
+
+          <!-- Category Filter Buttons -->
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px;">
+            <button type="button" class="btn btn-primary btn-sm filter-cat-btn active" data-cat="ALL" data-i18n="filter_all">All Facilities</button>
+            <button type="button" class="btn btn-outline btn-sm filter-cat-btn" data-cat="HOSPITAL" data-i18n="filter_hospitals">Hospitals</button>
+            <button type="button" class="btn btn-outline btn-sm filter-cat-btn" data-cat="CHC" data-i18n="filter_chc">Community Centres (CHC)</button>
+            <button type="button" class="btn btn-outline btn-sm filter-cat-btn" data-cat="PHC" data-i18n="filter_phc">Primary Centres (PHC)</button>
+            <button type="button" class="btn btn-outline btn-sm filter-cat-btn" data-cat="CLINIC" data-i18n="filter_clinic">Sub-Centres / Clinics</button>
+          </div>
+
+          <!-- Emergency Filter Toggle -->
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 8px;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: #991B1B; cursor: pointer;">
+              <input type="checkbox" id="emergency-filter-toggle" style="accent-color: var(--emergency-color);">
+              <span data-i18n="filter_emergency_toggle">🚨 Only show facilities with 24/7 Emergency Care</span>
+            </label>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">
+              Sample data clearly labeled
+            </span>
+          </div>
+        </div>
+
+        <!-- Rendered Facilities List -->
+        <div id="facility-list-container"></div>
+
+      </section>
+
+      <!-- Right Column: Leaflet Interactive Map -->
+      <section class="map-pane">
+        <div id="leaflet-map"></div>
+        <div style="position: absolute; bottom: 10px; left: 10px; z-index: 500; background: rgba(255,255,255,0.95); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.75rem; box-shadow: var(--shadow-sm); display: flex; gap: 10px;">
+          <span><span style="color:#EF4444;">●</span> Hospital</span>
+          <span><span style="color:#F59E0B;">●</span> CHC</span>
+          <span><span style="color:#0D9488;">●</span> PHC</span>
+          <span><span style="color:#0284C7;">●</span> Sub-Centre</span>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer" style="margin-top: 1.5rem;">
+    <div class="footer-bottom">
+      <div>&copy; 2026 MedPulse AI — Rural Healthcare Triage & Navigator. Hackathon Demonstration Edition.</div>
+      <div>Map Data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> Contributors</div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/facilities.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symptom Assessment — MedPulse AI</title>
+  <meta name="description" content="Multilingual AI-assisted clinical symptom assessment for rural healthcare. Preliminary urgency guidance in English, Tamil, and Hindi.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Emergency Alert Bar -->
+  <aside class="emergency-top-banner">
+    <span>🚨 <span data-i18n="emergency_call_text">Emergency? Call 108 / 112 immediately</span></span>
+    <span class="dial-badge">
+      <a href="tel:108">Ambulance: 108</a> • <a href="tel:112">National: 112</a> • <a href="tel:104">Health Advice: 104</a>
+    </span>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        MedPulse <span class="highlight">AI</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+        <li><a href="assessment.html" class="active" data-i18n="nav_symptoms">Check Symptoms</a></li>
+        <li><a href="facilities.html" data-i18n="nav_facilities">Find Healthcare</a></li>
+        <li><a href="dashboard.html" data-i18n="nav_dashboard">My Dashboard</a></li>
+        <li><a href="clinician.html" data-i18n="nav_clinician">Clinician Portal</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <select id="global-lang-select" class="lang-selector-select" aria-label="Choose Language">
+          <option value="en">🇬🇧 English</option>
+          <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    
+    <div style="margin-bottom: 2rem;">
+      <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;" data-i18n="assess_page_title">
+        Symptom Reporting & Care Urgency Assessment
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1rem; max-width: 800px;" data-i18n="assess_page_desc">
+        Speak or type your symptoms in your preferred language. MedPulse AI uses validated clinical red-flag rules to provide preliminary triage guidance and match you with the appropriate healthcare facility.
+      </p>
+    </div>
+
+    <div class="assessment-layout">
+      
+      <!-- Left Column: Input Form -->
+      <section class="card" aria-label="Symptom Entry Form">
+        <form id="assessment-form">
+
+          <!-- Language Selector for reporting -->
+          <div class="form-group">
+            <label for="assessment-lang-select" class="form-label" data-i18n="label_choose_lang">
+              1. Choose Reporting Language
+            </label>
+            <select id="assessment-lang-select" class="form-control" style="font-weight: 600;">
+              <option value="en">English (Indian English / US)</option>
+              <option value="ta">தமிழ் (Tamil - மதுரை / தமிழ் வட்டாரம்)</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+          </div>
+
+          <!-- Large Voice Input Microphone Button -->
+          <div class="voice-input-container">
+            <button type="button" id="mic-btn" class="btn-mic" title="Click to speak your symptoms">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+            <div class="voice-status-info">
+              <div class="voice-status-title" id="voice-status-title" data-i18n="voice_status_ready">Click microphone to speak symptoms</div>
+              <div class="voice-status-desc" id="voice-status-desc" data-i18n="voice_status_supported">
+                Supports Tamil, Hindi, and English voice recognition.
+              </div>
+            </div>
+          </div>
+
+          <!-- Symptom Description Textarea -->
+          <div class="form-group">
+            <label for="symptoms-input" class="form-label" data-i18n="label_describe_symptoms">
+              2. Describe How You Feel
+            </label>
+            <textarea id="symptoms-input" class="form-control" data-i18n-placeholder="symptoms_placeholder" placeholder="Describe symptoms here... For example: 'I have severe chest pain and breathlessness' or 'நெஞ்சு வலி மற்றும் மூச்சுத்திணறல்' or '4 दिन से तेज बुखार'"></textarea>
+          </div>
+
+          <!-- Quick Example Prompt Chips -->
+          <div class="form-group">
+            <label class="form-label"><small data-i18n="label_sample_prompts">Or click a sample case to test:</small></label>
+            <div class="chips-wrapper">
+              <span class="prompt-chip" data-lang="en" data-text="Sudden severe crushing chest pain, sweating, and difficulty breathing">
+                🚨 Emergency: Chest Pain & Breathing
+              </span>
+              <span class="prompt-chip" data-lang="ta" data-text="நெஞ்சு வலி மற்றும் மூச்சுத்திணறல், அதிக வியர்வை">
+                🚨 தமிழ்: நெஞ்சு வலி (Emergency)
+              </span>
+              <span class="prompt-chip" data-lang="hi" data-text="सीने में तेज दर्द और सांस लेने में भारी तकलीफ">
+                🚨 हिन्दी: सीने में तेज दर्द (Emergency)
+              </span>
+              <span class="prompt-chip" data-lang="en" data-text="High fever for 4 days with body aches and rash on skin">
+                ⚠️ Urgent: High Fever 4 Days
+              </span>
+              <span class="prompt-chip" data-lang="ta" data-text="4 நாட்களாக கடுமையான காய்ச்சல் மற்றும் வாந்தி">
+                ⚠️ தமிழ்: 4 நாள் காய்ச்சல் (Urgent)
+              </span>
+              <span class="prompt-chip" data-lang="en" data-text="Mild cough and runny nose for 2 days, slight sore throat">
+                ✅ Routine: Mild Cold & Cough
+              </span>
+              <span class="prompt-chip" data-lang="hi" data-text="हल्की खांसी और जुकाम दो दिन से">
+                ✅ हिन्दी: हल्की खांसी व जुकाम (Routine)
+              </span>
+            </div>
+          </div>
+
+          <!-- Optional Context Fields -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="age-group-select" class="form-label" data-i18n="label_age_group">Age Group (Optional)</label>
+              <select id="age-group-select" class="form-control">
+                <option value="adult" data-i18n="opt_adult">Adult (19 - 59 years)</option>
+                <option value="child" data-i18n="opt_child">Child (Under 12 years)</option>
+                <option value="teen" data-i18n="opt_teen">Teenager (12 - 18 years)</option>
+                <option value="senior" data-i18n="opt_senior">Senior (60+ years)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="duration-select" class="form-label" data-i18n="label_duration">Duration (Optional)</label>
+              <select id="duration-select" class="form-control">
+                <option value="< 24 hours" data-i18n="opt_dur_24h">Less than 24 hours</option>
+                <option value="1-3 days" data-i18n="opt_dur_1_3d">1 to 3 days</option>
+                <option value="4-7 days" data-i18n="opt_dur_4_7d">4 to 7 days</option>
+                <option value="> 1 week" data-i18n="opt_dur_1w">More than a week</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="context-input" class="form-label" data-i18n="label_context">
+              Medical Context / Preexisting Conditions (Optional)
+            </label>
+            <input type="text" id="context-input" class="form-control" data-i18n-placeholder="context_placeholder" placeholder="e.g. Diabetes, Hypertension, Pregnancy, None">
+          </div>
+
+          <!-- Privacy Opt-in Checkbox -->
+          <div class="form-group" style="margin-top: 1.5rem; background: var(--surface-alt); padding: 10px 14px; border-radius: var(--radius-md);">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.85rem; color: var(--text-main);">
+              <input type="checkbox" id="save-history-consent" style="margin-top: 3px; accent-color: var(--primary);">
+              <span data-i18n="save_history_label">
+                <strong>Save to Private History:</strong> Keep this assessment record accessible in my local dashboard. (Unchecked by default for privacy).
+              </span>
+            </label>
+          </div>
+
+          <!-- Buttons -->
+          <div style="display: flex; gap: 12px; margin-top: 1.5rem;">
+            <button type="submit" id="submit-assessment-btn" class="btn btn-primary" style="flex: 2;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+              <span data-i18n="btn_assess_urgency">Assess Care Urgency</span>
+            </button>
+            <button type="button" id="reset-assessment-btn" class="btn btn-outline" style="flex: 1;" data-i18n="btn_reset_form">
+              Reset Form
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- Right Column: Interactive Results Panel -->
+      <section id="results-panel" aria-label="Triage Assessment Guidance">
+        <div class="card" style="text-align: center; padding: 3.5rem 1.5rem; color: var(--text-muted);">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1rem; opacity: 0.4;">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <h4 style="font-weight: 700; color: var(--text-main); margin-bottom: 6px;" data-i18n="results_empty_title">Ready to Assess Your Symptoms</h4>
+          <p style="font-size: 0.9rem;" data-i18n="results_empty_desc">
+            Describe symptoms using the microphone or text box on the left, then click Assess Care Urgency. Your preliminary triage guidance will appear here.
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h5>About MedPulse AI</h5>
+        <p>Accessible rural healthcare navigation with validated clinical safety rules and multilingual symptom reporting.</p>
+      </div>
+      <div class="footer-column">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="assessment.html">Check Symptoms</a></li>
+          <li><a href="facilities.html">Healthcare Finder</a></li>
+          <li><a href="dashboard.html">Patient Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h5>Emergency Numbers</h5>
+        <ul>
+          <li><strong>Ambulance:</strong> <a href="tel:108">108</a></li>
+          <li><strong>National Emergency:</strong> <a href="tel:112">112</a></li>
+          <li><strong>Health Info:</strong> <a href="tel:104">104</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h5>Clinical Disclaimer</h5>
+        <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);">
+          MedPulse AI provides preliminary guidance, not a medical diagnosis. In any life-threatening situation, call 108 immediately.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>&copy; 2026 MedPulse AI. Hackathon Demonstration Edition.</div>
+      <div>Zero PHI Logged • Privacy Safeguarded</div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/triage.js"></script>
+</body>
+</html>

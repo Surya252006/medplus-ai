@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinician & ASHA Triage Console — MedPulse AI</title>
+  <meta name="description" content="Clinical decision dashboard for rural healthcare providers, doctors, and ASHA community health workers.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Emergency Alert Bar -->
+  <aside class="emergency-top-banner">
+    <span>🚨 <span data-i18n="emergency_call_text">Emergency? Call 108 / 112 immediately</span></span>
+    <span class="dial-badge">
+      <a href="tel:108">Ambulance: 108</a> • <a href="tel:112">National: 112</a> • <a href="tel:104">Health Advice: 104</a>
+    </span>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        MedPulse <span class="highlight">AI</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+        <li><a href="assessment.html" data-i18n="nav_symptoms">Check Symptoms</a></li>
+        <li><a href="facilities.html" data-i18n="nav_facilities">Find Healthcare</a></li>
+        <li><a href="dashboard.html" data-i18n="nav_dashboard">My Dashboard</a></li>
+        <li><a href="clinician.html" class="active" data-i18n="nav_clinician">Clinician Portal</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <select id="global-lang-select" class="lang-selector-select" aria-label="Choose Language">
+          <option value="en">🇬🇧 English</option>
+          <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    
+    <!-- Portal Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="background: var(--primary-light); color: var(--primary); font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: var(--radius-sm); border: 1px solid var(--primary-subtle);">
+            DEMO CLINICAL CONSOLE
+          </span>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">
+            Melur Taluk Hospital & Rural CHC Cluster
+          </span>
+        </div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.02em;" data-i18n="clinician_page_title">
+          Healthcare Professional Triage Review
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;" data-i18n="clinician_page_desc">
+          Incoming multilingual patient triage summaries. High-priority Emergency cases are automatically pinned to the top.
+        </p>
+      </div>
+
+      <div style="background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 8px 14px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px;">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #10B981;"></span>
+        <span data-i18n="doctor_on_duty_label">Doctor On Duty: <strong>Dr. R. Sundaram, MD</strong> (Casualty Officer)</span>
+      </div>
+    </div>
+
+    <!-- Filter Buttons Bar -->
+    <div style="display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+      <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-right: 6px;" data-i18n="filter_queue_label">Filter Triage Queue:</span>
+      <button type="button" class="btn btn-primary btn-sm queue-filter-btn active" data-filter="ALL" data-i18n="queue_filter_all">All Cases</button>
+      <button type="button" class="btn btn-outline btn-sm queue-filter-btn" data-filter="EMERGENCY" data-i18n="queue_filter_emerg">Emergency Only (Red)</button>
+      <button type="button" class="btn btn-outline btn-sm queue-filter-btn" data-filter="URGENT" data-i18n="queue_filter_urgent">Urgent Cases (Amber)</button>
+      <button type="button" class="btn btn-outline btn-sm queue-filter-btn" data-filter="ROUTINE" data-i18n="queue_filter_routine">Routine Cases (Green)</button>
+    </div>
+
+    <!-- Patient Queue Cards List -->
+    <div id="clinician-queue-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+      <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p>Loading clinical triage queue...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-bottom">
+      <div>&copy; 2026 MedPulse AI — Rural Healthcare Triage & Navigator. Hackathon Demonstration Edition.</div>
+      <div>Designed for Doctors, Medical Officers & ASHA Community Health Workers</div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    let queueItems = [];
+    let currentFilter = 'ALL';
+
+    async function loadClinicianQueue() {
+      const container = document.getElementById('clinician-queue-container');
+      try {
+        queueItems = await api.getClinicianQueue();
+        renderQueue();
+      } catch (err) {
+        console.error("Queue load error:", err);
+        container.innerHTML = `<div class="card" style="text-align: center; color: red;">Failed to load triage queue</div>`;
+      }
+    }
+
+    function renderQueue() {
+      const container = document.getElementById('clinician-queue-container');
+      if (!container) return;
+
+      const filtered = queueItems.filter(item => {
+        if (currentFilter === 'ALL') return true;
+        return item.urgency_category === currentFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+            <p style="font-weight: 700;">No triage cases match the selected filter (${currentFilter}).</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        let borderLeftColor = item.urgency_color || '#10B981';
+        let badgeBg = '#ECFDF5';
+        let badgeText = '#065F46';
+        if (item.urgency_category === 'EMERGENCY') { badgeBg = '#FEF2F2'; badgeText = '#991B1B'; }
+        else if (item.urgency_category === 'URGENT') { badgeBg = '#FFFBEB'; badgeText = '#92400E'; }
+
+        return `
+          <div class="card" id="queue-item-${item.id}" style="border-left: 5px solid ${borderLeftColor};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+              <div>
+                <span style="background: ${badgeBg}; color: ${badgeText}; font-size: 0.8rem; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-sm); letter-spacing: 0.03em;">
+                  ${item.urgency_category}
+                </span>
+                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin-left: 8px;">
+                  Token ID: ${item.id}
+                </span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 6px;">
+                  (${item.created_at})
+                </span>
+              </div>
+              <div>
+                ${item.clinician_acknowledged ? `
+                  <span style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; font-size: 0.775rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 4px;">
+                    ✓ Clinician Reviewed & Verified
+                  </span>
+                ` : `
+                  <span style="background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; font-size: 0.775rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 4px;">
+                    ⏳ AI Draft — Pending Doctor Review
+                  </span>
+                `}
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+              <div>
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                  Patient Reported Symptoms (Original Language: ${item.language.toUpperCase()})
+                </div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-top: 4px; line-height: 1.5; background: var(--surface-alt); padding: 10px; border-radius: var(--radius-sm);">
+                  "${item.symptoms_original}"
+                </div>
+
+                <div style="margin-top: 10px; font-size: 0.875rem; color: var(--text-muted);">
+                  <strong>AI Preliminary Rationale:</strong> ${item.summary_text}
+                </div>
+              </div>
+
+              <div style="border-left: 1px solid var(--border-color); padding-left: 1.25rem;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Clinical Demographics</div>
+                <div style="font-size: 0.875rem; margin-top: 4px;"><strong>Age Group:</strong> ${item.age_group || 'Adult'}</div>
+                <div style="font-size: 0.875rem; margin-top: 2px;"><strong>Reported Duration:</strong> ${item.duration || 'Not specified'}</div>
+                <div style="font-size: 0.875rem; margin-top: 2px;"><strong>Matched Facility:</strong> ${item.recommended_facility_type}</div>
+              </div>
+            </div>
+
+            <!-- Clinician Acknowledgment & Actions -->
+            <div style="border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div style="flex: 1; max-width: 500px;">
+                <input type="text" id="notes-${item.id}" class="form-control" style="min-height: 38px; font-size: 0.85rem;" placeholder="Add doctor notes / triage order (e.g. 'Admit to Bed 4, start IV fluids' or 'OPD prescription given')" value="${item.clinician_notes || ''}">
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn btn-primary btn-sm" onclick="acknowledgeCase('${item.id}')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  ${item.clinician_acknowledged ? 'Update Clinical Notes' : 'Acknowledge & Sign Off'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function acknowledgeCase(id) {
+      const notes = document.getElementById(`notes-${id}`)?.value || '';
+      try {
+        await api.clinicianAcknowledge(id, notes);
+        showToast(`Case ${id} reviewed and acknowledged!`, "success");
+        loadClinicianQueue();
+      } catch (err) {
+        showToast("Failed to acknowledge case", "error");
+      }
+    }
+
+    // Filter clicks
+    document.querySelectorAll('.queue-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.queue-filter-btn').forEach(b => {
+          b.classList.remove('active', 'btn-primary');
+          b.classList.add('btn-outline');
+        });
+        btn.classList.add('active', 'btn-primary');
+        btn.classList.remove('btn-outline');
+        currentFilter = btn.getAttribute('data-filter');
+        renderQueue();
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', loadClinicianQueue);
+  </script>
+</body>
+</html>

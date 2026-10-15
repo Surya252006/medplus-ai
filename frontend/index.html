@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedPulse AI — Rural Healthcare Triage & Resource Navigator</title>
+  <meta name="description" content="AI-powered rural healthcare triage, multilingual symptom reporting (Tamil, Hindi, English), preliminary urgency assessment, and OpenStreetMap healthcare facility finder.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Emergency Alert Bar -->
+  <aside class="emergency-top-banner" aria-label="Emergency Hotline">
+    <span>🚨 <span data-i18n="emergency_call_text">Emergency? Call 108 / 112 immediately</span></span>
+    <span class="dial-badge">
+      <a href="tel:108">Ambulance: 108</a> • <a href="tel:112">National: 112</a> • <a href="tel:104">Health Advice: 104</a>
+    </span>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo" id="nav-brand-logo">
+        <div class="brand-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        MedPulse <span class="highlight">AI</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="active" data-i18n="nav_home">Home</a></li>
+        <li><a href="assessment.html" data-i18n="nav_symptoms">Check Symptoms</a></li>
+        <li><a href="facilities.html" data-i18n="nav_facilities">Find Healthcare</a></li>
+        <li><a href="dashboard.html" data-i18n="nav_dashboard">My Dashboard</a></li>
+        <li><a href="clinician.html" data-i18n="nav_clinician">Clinician Portal</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <select id="global-lang-select" class="lang-selector-select" aria-label="Choose Language">
+          <option value="en">🇬🇧 English</option>
+          <option value="ta">🇮🇳 தமிழ் (Tamil)</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-pill" data-i18n="hero_pill">
+        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--primary);"></span>
+        Rural & Semi-Urban Healthcare Navigation
+      </div>
+
+      <h1 class="hero-title" data-i18n="hero_title">
+        The Right Care Starts with the Right Guidance.
+      </h1>
+
+      <p class="hero-subtitle" data-i18n="hero_subtitle">
+        Empowering rural and semi-urban communities with multilingual symptom reporting, instant safety-first urgency assessment, and a verified guide to nearby public health facilities.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="assessment.html" class="btn btn-primary btn-lg" id="btn-hero-triage">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+          <span data-i18n="btn_check_symptoms">Check My Symptoms</span>
+        </a>
+        <a href="facilities.html" class="btn btn-secondary btn-lg" id="btn-hero-facilities">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          </svg>
+          <span data-i18n="btn_find_healthcare">Find Nearby Healthcare</span>
+        </a>
+      </div>
+
+      <div id="backend-status-badge" style="margin-top: 1.25rem; font-size: 0.85rem; font-weight: 600;">
+        Checking backend connectivity...
+      </div>
+    </section>
+
+    <!-- Three Main Feature Cards -->
+    <section class="features-grid">
+      <div class="card feature-card">
+        <div class="feature-icon-box">
+          🎙️
+        </div>
+        <h3 data-i18n="feat_1_title">Speak in Your Language</h3>
+        <p data-i18n="feat_1_desc">
+          Describe symptoms naturally using voice input or text in Tamil, Hindi, or English. Designed for accessibility, low digital literacy, and voice-first interaction in rural blocks.
+        </p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-box">
+          ⚡
+        </div>
+        <h3 data-i18n="feat_2_title">Understand Your Care Urgency</h3>
+        <p data-i18n="feat_2_desc">
+          Validated clinical triage rules identify critical red flags immediately. Know clearly if your condition requires Emergency care, Urgent evaluation, or Routine consultation.
+        </p>
+      </div>
+
+      <div class="card feature-card">
+        <div class="feature-icon-box">
+          📍
+        </div>
+        <h3 data-i18n="feat_3_title">Find Nearby Healthcare</h3>
+        <p data-i18n="feat_3_desc">
+          Navigate verified Primary Health Centres, Community Health Centres, and Taluk Hospitals on an interactive OpenStreetMap with emergency hours, contacts, and public transit info.
+        </p>
+      </div>
+    </section>
+
+    <!-- Simple Three-Step Process Explanation -->
+    <section class="process-section">
+      <div class="section-header">
+        <h2>How MedPulse AI Works</h2>
+        <p>Three straightforward steps to bridge the distance between symptom and safe care.</p>
+      </div>
+
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-badge">1</div>
+          <h4 data-i18n="step_1_title">1. Describe Symptoms</h4>
+          <p data-i18n="step_1_desc">
+            Speak into the microphone or type how you feel in Tamil, Hindi, or English. Optional questions ask for age group and duration.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">2</div>
+          <h4 data-i18n="step_2_title">2. Review Urgency Guidance</h4>
+          <p data-i18n="step_2_desc">
+            Instantly receive preliminary triage category (Emergency Red, Urgent Amber, or Routine Green) with clear, transparent clinical reasoning.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-badge">3</div>
+          <h4 data-i18n="step_3_title">3. Find Appropriate Care</h4>
+          <p data-i18n="step_3_desc">
+            Locate the nearest government health center or hospital equipped for your care level, complete with phone numbers, bed capacity, and bus routes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Impact Section for Rural / Semi-Urban Communities -->
+    <section class="impact-banner">
+      <div class="impact-content">
+        <h3>Bridging Healthcare Disparities in Rural Communities</h3>
+        <p>
+          In rural districts, lack of medical triage often leads to two fatal extremes: critical emergencies delayed until it's too late, or overburdened tertiary hospitals crowded with mild, routine conditions. MedPulse AI acts as a digital first-responder companion for patients and ASHA community health workers.
+        </p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="assessment.html" class="btn btn-primary" style="background:#FFFFFF; color: #064E3B;">
+            Try Symptom Assessment
+          </a>
+          <a href="clinician.html" class="btn btn-outline" style="border-color: rgba(255,255,255,0.4); color: #FFFFFF;">
+            Explore Clinician Portal
+          </a>
+        </div>
+      </div>
+
+      <div class="impact-stats">
+        <div class="stat-box">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Safety-First Red Flag Rules</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">3+</div>
+          <div class="stat-label">Regional Languages Supported</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Emergency Helpline Linkage</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Mandatory Sign-up Friction</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h5>About MedPulse AI</h5>
+        <p>
+          An open-access healthcare triage and resource navigator designed for rural and semi-urban communities. Built with safety-first clinical decision rules, multilingual NLP, and OpenStreetMap.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="assessment.html">Check Symptoms</a></li>
+          <li><a href="facilities.html">Healthcare Finder</a></li>
+          <li><a href="dashboard.html">Patient Dashboard</a></li>
+          <li><a href="clinician.html">Clinician Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h5>Emergency Numbers</h5>
+        <ul>
+          <li><strong>Ambulance:</strong> <a href="tel:108">108</a></li>
+          <li><strong>National Emergency:</strong> <a href="tel:112">112</a></li>
+          <li><strong>Health Info Helpline:</strong> <a href="tel:104">104</a></li>
+          <li><strong>Women's Helpline:</strong> <a href="tel:1091">1091</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h5>Safety & Privacy</h5>
+        <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);">
+          MedPulse AI provides preliminary guidance, not a medical diagnosis. No symptom data is stored without explicit patient consent. Always consult a licensed doctor for medical treatment.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 MedPulse AI — Rural Healthcare Triage & Navigator. Hackathon Demonstration Edition.</div>
+      <div>Designed with Teal Green & Soft Blue Healthcare Palette</div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
